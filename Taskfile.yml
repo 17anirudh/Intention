@@ -1,0 +1,23 @@
+version: '3'
+output: interleaved
+
+var:
+  UI: ./ts
+  PY: ./py
+
+tasks:
+  ts:
+    dir: '{{.UI}}'
+    cmds: 
+      - bun run dev
+    prefix: ui
+
+  py:
+    dir: '{{.PY}}'
+    cmds: 
+      - uv run main.py
+
+  dev:
+    cmds:
+      - task: ts
+      - task: py
