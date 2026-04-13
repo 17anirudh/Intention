@@ -6,6 +6,9 @@ This is **Team Dhurandar**'s project for **Solution Challenge 2026 - Build with 
 - [@17anirudh](https://github.com/17anirudh)
 - [@yashanchan](https://github.com/yashanchan)
 
+## Gallery
+![Ingestion.png](/assets/ingestion.png)
+
 ## Problem Statement and Objective
 - Data-Driven Volunteer Coordination for Social Impact:
     Local social groups and NGOs collect a lot of important information about community needs through paper surveys and field reports. However, this valuable data is often scattered across different places, making it hard to see the biggest problems clearly.

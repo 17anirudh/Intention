@@ -1,17 +1,15 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from gunicorn.app.base import BaseApplication
-from log import LOGGING_CONFIG
+from config.log import LOGGING_CONFIG
 from routes.ingestion import router as ingestion_router
 
 app = FastAPI(
     title="Intention brain",
     description="Asynchronous API provider for Intention",
-    middleware=[
-        
-    ],
     docs_url="/docx"
 )
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000"],

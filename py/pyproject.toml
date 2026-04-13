@@ -1,8 +1,7 @@
-[project]
+[Spred API]
 name = "py"
 version = "0.1.0"
-description = "Add your description here"
-readme = "README.md"
+description = "Asynchronous API provider for Intention"
 requires-python = ">=3.14"
 dependencies = [
     "fastapi>=0.135.3",

@@ -1,8 +1,8 @@
 from fastapi import HTTPException
 from fastapi.routing import APIRouter
-from ..services.pdf import Pdf
-from ..services.docx import DocxProcessor
-from ..types.document import TypeEnum, DocumentResponse, DocumentRequest
+from services.pdf import Pdf
+from services.docx import DocxProcessor
+from types.document import TypeEnum, DocumentResponse, DocumentRequest
 import logging
 
 router = APIRouter()
