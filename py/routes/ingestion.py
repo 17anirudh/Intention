@@ -3,14 +3,12 @@ from fastapi.routing import APIRouter
 from services.ingestion import IngestionService
 from custom.controllers import IngestionResponse, IngestionRequest
 import logging
-import timeit
 
 router = APIRouter()
 logger = logging.getLogger("app")
 
 @router.post("/ingestion", response_model=IngestionResponse)
 async def ingest(request: IngestionRequest):
-    t1 = timeit.default_timer()
     ingestion_service = IngestionService()
     try:
         for file in request.file:

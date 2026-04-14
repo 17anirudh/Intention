@@ -1,6 +1,8 @@
+#!/usr/bin/env python
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routes.ingestion import router as ingestion_router
+import routes
 import uvicorn
 
 app = FastAPI(
@@ -17,7 +19,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(ingestion_router)
+[app.include_router(router) for router in routes.__all__]
 
 @app.get('/')
 def root():
@@ -28,5 +30,5 @@ def root():
     }
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8000, env_file=".env.local")
     

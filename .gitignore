@@ -21,3 +21,6 @@ __pycache__
 py/*.md
 py/*.pdf
 dump
+CLAUE.md
+*.md
+.claude

@@ -5,8 +5,6 @@ from docx import Document
 from custom.structer import DocumentMetaData
 import logging
 
-logger = logging.getLogger(__name__)
-
 
 class IngestionService:
     def __init__(self):
@@ -83,8 +81,6 @@ class IngestionService:
         else:
             raise ValueError("Unsupported file type")
 
-    def ingest_all(self, files: List[Union[str, BinaryIO, IO]]) -> List[Optional[DocumentMetaData]]:
-        return [self.ingest(f) for f in files]
 
     def _get_filename(self, file: Union[str, BinaryIO, IO]) -> str:
         if isinstance(file, str):

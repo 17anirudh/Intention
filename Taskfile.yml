@@ -7,17 +7,15 @@ var:
 
 tasks:
   ts:
-    dir: '{{.UI}}'
-    cmds: 
-      - bun run dev
+    cmds:
+      - cd ts && bun run dev
     prefix: ui
 
   py:
-    dir: '{{.PY}}'
-    cmds: 
-      - uv run main.py
+    cmds:
+      - cd py && uv run main.py
 
   dev:
-    cmds:
-      - task: ts
-      - task: py
+    deps:
+      - ts
+      - py
