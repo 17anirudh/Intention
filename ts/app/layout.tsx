@@ -10,8 +10,8 @@ const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({variable: "--font-geist-mono", subsets: ["latin"]});
 
 export const metadata: Metadata = {
-  title: "Intention",
-  description: "A platform which extracts goals from any unstructured files and also helps you with visibility",
+  title: "Uncapped",
+  description: "Orchestrator for NGOs for Smart Resource Allocation",
   icons: {
     icon: '/logo.webp'
   }

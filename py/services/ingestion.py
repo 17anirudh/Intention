@@ -1,79 +1,103 @@
-from types.structer import DocumentMetaData
-from typing import BinaryIO, IO, Optional, Union, List
-from io import BytesIO
+from typing import Union, BinaryIO, IO, Optional, List
+from datetime import datetime, date
 import fitz
 from docx import Document
-from docx.table import Table
-from docx.text.paragraph import Paragraph
+from custom.structer import DocumentMetaData
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 class IngestionService:
-    def __init__(self, input_path: str, output_path: str):
-        self.input_path = input_path
-        self.output_path = output_path
+    def __init__(self):
+        pass
 
     def _ingest_pdf(self, file: Union[str, BinaryIO, IO]) -> Optional[DocumentMetaData]:
+        doc = None
         try:
             doc = fitz.open(file)
-            text = ""
-            count: int = 0
+
+            text_parts: List[str] = []
             for page in doc:
-                text += page.get_text()
-                count += 1
+                page_text = page.get_text("text")  # simple + reliable
+                if page_text:
+                    text_parts.append(page_text.strip())
+
+            metadata = doc.metadata or {}
+
+            # Try parsing date safely
+            raw_date = metadata.get("creationDate")
+            parsed_date = self._parse_pdf_date(raw_date)
+
             return DocumentMetaData(
-                title=doc.get_metadata().get("title"),
-                date_conducted=doc.get_metadata().get("creationdate"),
-                page_nums=count,
-                text=text
+                name=self._get_filename(file),
+                title=metadata.get("title"),
+                date_conducted=parsed_date,
+                page_nums=len(doc),
+                text="\n\n".join(text_parts)
             )
+
         except Exception as e:
-            print(f"Error ingesting PDF: {e}")
+            print(f"[PDF ERROR] {e}")
             return None
+
         finally:
-            doc.close()
+            if doc:
+                doc.close()
 
     def _ingest_docx(self, file: Union[str, BinaryIO, IO]) -> Optional[DocumentMetaData]:
-        text: List[str] = []
-        doc = Document(file)
-        counter: int = 0
         try:
-            for child in doc.element.body:
-                counter += 1
-                if child.tag.endswith('p'):
-                    para = Paragraph(child, doc)
-                    text = " ".join(para.text.split()).strip()
-                    if text:
-                        if para.style.name.startswith('Heading'):
-                            level = para.style.name.split()[-1]
-                            prefix = "#" * (int(level) if level.isdigit() else 1)
-                            text.append(f"{prefix} {text}")
-                        else:
-                            text.append(text)
-                
-                elif child.tag.endswith('tbl'):
-                    table = Table(child, doc)
-                    markdown_content.append(self._process_table(table))
+            doc = Document(file)
+
+            text_parts: List[str] = []
+
+            for para in doc.paragraphs:
+                clean = para.text.strip()
+                if clean:
+                    text_parts.append(clean)
+
+            core = doc.core_properties
 
             return DocumentMetaData(
-                title=doc.core_properties.title,
-                date_conducted=doc.core_properties.created,
-                page_nums=counter,
-                text="\n".join(text)
+                name=self._get_filename(file),
+                title=core.title,
+                date_conducted=core.created.date() if core.created else None,
+                page_nums=len(doc.paragraphs),  # approximation
+                text="\n\n".join(text_parts)
             )
+
         except Exception as e:
-            print(f"Error ingesting DOCX: {e}")
+            print(f"[DOCX ERROR] {e}")
             return None
-        finally:
-            doc.close()
 
     def ingest(self, file: Union[str, BinaryIO, IO]) -> Optional[DocumentMetaData]:
-        ext: str = file.split('.')[-1] if isinstance(file, str) else ''
-        match ext:
-            case 'pdf':
-                return self._ingest_pdf(file)
-            case 'docx':
-                return self._ingest_docx(file)
-            case _:
-                raise ValueError("Unsupported file type")
+        if isinstance(file, str):
+            ext = file.lower().split('.')[-1]
+        else:
+            ext = ""
+
+        if ext == "pdf":
+            return self._ingest_pdf(file)
+        elif ext == "docx":
+            return self._ingest_docx(file)
+        else:
+            raise ValueError("Unsupported file type")
 
     def ingest_all(self, files: List[Union[str, BinaryIO, IO]]) -> List[Optional[DocumentMetaData]]:
-        return [self.ingest(file) for file in files]
+        return [self.ingest(f) for f in files]
+
+    def _get_filename(self, file: Union[str, BinaryIO, IO]) -> str:
+        if isinstance(file, str):
+            return file.split("/")[-1]
+        return "uploaded_file"
+
+    def _parse_pdf_date(self, raw: Optional[str]) -> Optional[date]:
+        if not raw:
+            return None
+
+        try:
+            raw = raw.replace("D:", "")
+            dt = datetime.strptime(raw[:14], "%Y%m%d%H%M%S")
+            return dt.date()
+        except Exception:
+            return None

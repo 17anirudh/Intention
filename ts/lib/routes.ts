@@ -11,5 +11,8 @@ export const ROUTE = {
     },
     dashboard: {
         home: '/dashboard'
+    },
+    setup: {
+        home: '/setup'
     }
 }

@@ -1,4 +1,4 @@
-# Intention <img src="./ts/public/logo.webp" alt="Logo" width="27" height="27" />
+# Uncapped <img src="./ts/public/logo.webp" alt="Logo" width="27" height="27" />
 
 This is **Team Dhurandar**'s project for **Solution Challenge 2026 - Build with AI** choosing the theme **Smart Resource Allocation**
 

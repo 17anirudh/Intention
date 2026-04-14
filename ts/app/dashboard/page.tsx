@@ -1,10 +1,10 @@
-import FileUpload from "@/components/file-upload";
+import { FilesZone } from "@/components/file-zone";
 
 export default function Dashboard() {
     return (
         <>
             <h1>Welcome</h1>
-            <FileUpload />
+            <FilesZone />
         </>
     )
 }

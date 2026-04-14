@@ -1,7 +1,7 @@
 from enum import Enum
 from pydantic import BaseModel, Field
 from datetime import date
-from document import TypeEnum
+from custom.controllers import TypeEnum
 from typing import Optional, Tuple
 
 class SeverityLevel(str, Enum):

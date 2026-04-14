@@ -19,10 +19,10 @@ export default function Home() {
             <div role="img" className="w-20 h-20 relative">
               <Image src="/logo.webp" alt="Logo" fill sizes="80px" className="active:scale-75 hover:scale-105 transition-all duration-300 rounded-4xl" />
             </div>
-            <h1 className="text-4xl font-heading">Intention</h1>
+            <h1 className="text-4xl font-heading">Uncapped</h1>
           </div>
           <h2 className="text-xl font-serif wrap-break-word text-pretty">
-            We <span className="underline">parse</span> your data and identify <span className="underline">goals</span> and make you visible
+            We <span className="underline">orchestrate</span> and <span className="underline">help</span> you distribute resources effectively
           </h2>
           <Link 
             href={ROUTE.dashboard.home} 
